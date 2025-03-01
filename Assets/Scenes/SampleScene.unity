@@ -2892,21 +2892,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d0814c8df3b106419f487a30251698d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 5648868179257711895, guid: c6cecb774f36ebb4a917344a93e5e63a, type: 3}
+  bullet: {fileID: 2879577859590794689, guid: c6cecb774f36ebb4a917344a93e5e63a, type: 3}
   bulletSpawn: {fileID: 766265092}
   bulletSpeed: 10
   fireRate: 0.5
   canShoot: 0
+  isShooting: 0
   raycastRange: 10
   maxAngle: 60
   rotateSpeed: 100
   wait: 0.5
+  afterDetectionWait: 3
   rightDirection: 1
   rotator: {fileID: 131817984}
   isSearching: 1
-  isEscape: 0
+  canEscape: 0
   isWaiting: 0
   currentRotation: 0
+  target: {fileID: 0}
 --- !u!1 &641533434
 GameObject:
   m_ObjectHideFlags: 0
@@ -4337,7 +4340,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 204.49054, y: -49.19989}
+  m_AnchoredPosition: {x: 204.49048, y: -49.19983}
   m_SizeDelta: {x: 100, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1124856491
@@ -5202,7 +5205,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 88.3, y: -49.2}
+  m_AnchoredPosition: {x: 88.30005, y: -49.19995}
   m_SizeDelta: {x: 132.3892, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1316817818
@@ -11139,8 +11142,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3701142915970453023}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.649, y: 6.462, z: -6.33}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 4.95, y: 5.45, z: -12.38}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11148,7 +11151,7 @@ Transform:
   - {fileID: 4856449434697641647}
   - {fileID: 4843904256518514294}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!65 &1546829909201013109
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -19766,7 +19769,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coin: 0
   coinAmountUI: {fileID: 1708511263}
-  bullet: {fileID: 5648868179257711895, guid: c6cecb774f36ebb4a917344a93e5e63a, type: 3}
+  bullet: {fileID: 2879577859590794689, guid: c6cecb774f36ebb4a917344a93e5e63a, type: 3}
   bulletSpawn: {fileID: 95778653177971947}
   bulletSpeed: 25
   fireRate: 0.1

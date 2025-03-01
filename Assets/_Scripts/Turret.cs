@@ -10,12 +10,14 @@ public class Turret : MonoBehaviour
     public float bulletSpeed = 10f;
     public float fireRate;
     public bool canShoot = false;
+    public bool isShooting = false;
     public float raycastRange = 10f;
 
     [Header("Turret Settings")]
     public float maxAngle = 60f;
     public float rotateSpeed = 5;
     public float wait = 0.5f;
+    public float afterDetectionWait = 1f;
     public bool rightDirection = true;
     public GameObject rotator;
 
@@ -26,20 +28,22 @@ public class Turret : MonoBehaviour
     public float currentRotation;
     public Transform target;
 
+    private bool gismoz = false;
+
     void Start()
     {
-
+        Gizmos.color = Color.yellow;
     }
 
 
     void Update()
     {
+        //-180 to +180
         currentRotation = rotator.transform.eulerAngles.y;
         if (currentRotation > 180)
         {
             currentRotation -= 360;
         }
-        //Debug.Log(currentRotation);
 
 
         RaycastHit hit;
@@ -49,30 +53,39 @@ public class Turret : MonoBehaviour
             {
                 target = hit.collider.transform;
                 canEscape = true;
+                canShoot = true;
+                gismoz = true;
             }
         }
         else
         {
             target = null;
+            canShoot = false;
+            gismoz = false;
         }
 
 
         if (target == null)
         {
-            if (canEscape)
+            if (canEscape)//Daha önce target vardý
             {
-                Debug.Log("a");
-                canEscape = false;
+                rotator.transform.localRotation = Quaternion.RotateTowards(rotator.transform.localRotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * rotateSpeed);
+                if (rotator.transform.localRotation == Quaternion.Euler(0, 0, 0))
+                {
+                    StartCoroutine(Wait(afterDetectionWait));
+                    canEscape = false;
+                }
+
             }
 
-            if (isWaiting == false)
+            if (isWaiting == false && canEscape == false)
             {
-                if (currentRotation >= 60f && isWaiting == false)
+                if (currentRotation >= maxAngle && isWaiting == false)
                 {
                     StartCoroutine(Wait(wait));
                     rightDirection = false;
                 }
-                else if (currentRotation <= -60f && isWaiting == false)
+                else if (currentRotation <= -maxAngle && isWaiting == false)
                 {
                     StartCoroutine(Wait(wait));
                     rightDirection = true;
@@ -93,16 +106,15 @@ public class Turret : MonoBehaviour
         else//Player Found
         {
             var targetRotation = Quaternion.LookRotation(-1 * (target.position - rotator.transform.position)).eulerAngles.y;
-            if (!(currentRotation >= 59f) && !(currentRotation <= -59f))
+            if (!(currentRotation >= maxAngle) && !(currentRotation <= -maxAngle))
             {
                 rotator.transform.localRotation = Quaternion.RotateTowards(rotator.transform.localRotation, Quaternion.Euler(0, targetRotation, 0), Time.deltaTime * rotateSpeed);
             }
         }
 
-
-
-        if (canShoot)
+        if (canShoot == true && isShooting == false)
         {
+            isShooting = true;
             StartCoroutine(Shoot());
         }
 
@@ -115,6 +127,7 @@ public class Turret : MonoBehaviour
         bullets.GetComponent<Rigidbody>().AddForce(-bulletSpawn.transform.forward * bulletSpeed, ForceMode.Impulse);
         yield return new WaitForSeconds(fireRate);
         canShoot = true;
+        isShooting = false;
     }
 
     IEnumerator Wait(float wait)
@@ -126,7 +139,14 @@ public class Turret : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.yellow;
+        if (gismoz)
+        {
+            Gizmos.color = Color.red;
+        }
+        else
+        {
+            Gizmos.color = Color.yellow;
+        }
         Gizmos.DrawRay(bulletSpawn.transform.position, -bulletSpawn.transform.forward * raycastRange);
     }
 }
